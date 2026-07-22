@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>胡了吗 Demo v4.0</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <button class="icon-button" data-back aria-label="返回上一页">←</button>
+        <div class="brand-lockup">
+          <span class="brand-mark">胡</span>
+          <div>
+            <p class="eyebrow">Demo v4.0 · 牌局结算助手</p>
+            <h1>胡了吗</h1>
+          </div>
+        </div>
+        <button class="ghost-button compact" data-route="me" type="button">我的</button>
+      </header>
+
+      <section class="page active" id="home" data-title="首页">
+        <div class="home-layout simplified">
+          <section class="command-panel">
+            <p class="eyebrow">今晚牌局</p>
+            <h2>开局、记分、结算，一桌人一起完成</h2>
+            <div class="home-actions">
+              <button class="primary-action" data-route="create" type="button">创建牌局</button>
+              <button class="secondary-action" data-route="join" type="button">加入牌局</button>
+            </div>
+            <p class="home-hint">先创建或加入牌局，进入后直接从“记一局”完成单局结算和整盘收尾。</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="create" data-title="创建牌局">
+        <div class="flow-grid single">
+          <section class="form-surface">
+            <div class="section-title">
+              <p class="eyebrow">第一步</p>
+              <h2>基础信息</h2>
+            </div>
+            <div class="field-grid">
+              <label>
+                地区规则
+                <select id="ruleSelect">
+                  <option value="宁波麻将">宁波麻将</option>
+                  <option value="广东推倒胡">广东推倒胡</option>
+                  <option value="四川血战到底">四川血战到底</option>
+                  <option value="杭州麻将">杭州麻将</option>
+                </select>
+              </label>
+              <label>
+                底分
+                <input id="baseScore" type="number" min="1" value="2" />
+              </label>
+              <label>
+                封顶
+                <select id="capSelect">
+                  <option value="64">64 分</option>
+                  <option value="128">128 分</option>
+                  <option value="0">不封顶</option>
+                </select>
+              </label>
+              <label>
+                牌友圈
+                <select id="groupSelect">
+                  <option value="周六固定局">周六固定局</option>
+                  <option value="家庭局">家庭局</option>
+                  <option value="同学局">同学局</option>
+                </select>
+              </label>
+              <label>
+                圈数
+                <select id="roundLimitSelect">
+                  <option value="4">4 圈</option>
+                  <option value="8" selected>8 圈</option>
+                  <option value="16">16 圈</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="player-editor" id="playerEditor"></div>
+            <button class="primary-action full" id="createRoomBtn">生成房间</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="invite" data-title="房间生成">
+        <div class="invite-layout">
+          <aside class="invite-surface">
+            <div class="section-title">
+              <p class="eyebrow">房间已生成 · 邀请授权</p>
+              <h2 id="createRoomCode">HL-0826</h2>
+            </div>
+            <div class="qr-card" id="qrGrid" aria-label="房间二维码"></div>
+            <div class="invite-copy">
+              <span>房间码</span>
+              <strong id="inviteCode">HL-0826</strong>
+            </div>
+            <button class="secondary-action full share-download" type="button">长按下载分享</button>
+            <button class="primary-action full" data-route="settle" type="button">进入牌局房间</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="join" data-title="加入牌局">
+        <div class="join-layout">
+          <section class="form-surface">
+            <div class="section-title">
+              <p class="eyebrow">加入牌局</p>
+              <h2>输入房间码</h2>
+            </div>
+            <div class="join-code">
+              <input id="joinCode" type="text" value="HL-0826" maxlength="7" />
+              <button class="primary-action" id="joinRoomBtn">加入</button>
+            </div>
+            <label>
+              我的昵称
+              <input id="joinName" type="text" value="阿杰" />
+            </label>
+            <div class="avatar-picker" id="avatarPicker"></div>
+          </section>
+
+          <section class="data-block room-preview">
+            <div class="section-title">
+              <p class="eyebrow">牌局预览</p>
+              <h3>周六固定局</h3>
+            </div>
+            <div class="mini-scoreboard" id="joinPreview"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="room" data-title="牌局房间">
+        <div class="room-head">
+          <div>
+            <p class="eyebrow">牌局房间 · <span id="roomCodeText">HL-0826</span></p>
+            <h2><span id="roomRule">宁波麻将</span> · 第 <span id="roundNumber">1</span> 局</h2>
+          </div>
+          <div class="room-actions">
+            <button class="secondary-action" data-route="ai" type="button">AI 裁判</button>
+            <button class="secondary-action" data-route="summary" type="button">查看总账</button>
+            <button class="secondary-action share-download" type="button">长按下载分享</button>
+            <button class="primary-action" data-route="settle" type="button">单局结算</button>
+          </div>
+        </div>
+
+        <section class="scoreboard" id="scoreboard"></section>
+
+        <section class="room-grid">
+          <article class="data-block">
+            <div class="section-title">
+              <p class="eyebrow">最近结算</p>
+              <h3>单局流水</h3>
+            </div>
+            <div class="ledger-list" id="ledgerList"></div>
+          </article>
+          <article class="data-block">
+            <div class="section-title">
+              <p class="eyebrow">社交触发</p>
+              <h3>本场高光</h3>
+            </div>
+            <div class="highlight-grid" id="highlightGrid"></div>
+          </article>
+        </section>
+
+        <div class="sticky-bar">
+          <button class="secondary-action" data-route="history" type="button">历史记录</button>
+          <button class="secondary-action" data-route="summary" type="button">查看总账</button>
+          <button class="primary-action" data-route="settle" type="button">记一局</button>
+        </div>
+      </section>
+
+      <section class="page" id="settle" data-title="记一局">
+        <section class="settle-band">
+          <div class="settle-band-copy">
+            <p class="eyebrow" id="matchStatusLabel">进行中 · HL-0826</p>
+            <h2>第 <span id="settleRoundNumber">1</span> 局</h2>
+            <p id="settleBandCopy">每确认一局后仍停留在这里，下一局可以继续记录。</p>
+          </div>
+          <div class="settle-band-stats" id="settleBandStats"></div>
+          <div class="settle-band-actions">
+            <button class="secondary-action" data-route="summary" type="button">查看总账</button>
+            <button class="danger-action" id="endMatchBtn" type="button">终结整盘</button>
+          </div>
+        </section>
+        <div class="settle-layout">
+          <section class="form-surface">
+            <div class="section-title">
+              <p class="eyebrow">记一局</p>
+              <h2>确认输赢</h2>
+            </div>
+            <div class="field-grid">
+              <label>
+                赢家
+                <select id="winnerSelect"></select>
+              </label>
+              <label>
+                付款方式
+                <select id="payerMode">
+                  <option value="all">三家支付</option>
+                  <option value="single">点炮一家</option>
+                </select>
+              </label>
+              <label>
+                点炮/输家
+                <select id="loserSelect"></select>
+              </label>
+              <label>
+                倍数
+                <input id="multiplierInput" type="number" min="1" value="2" />
+              </label>
+            </div>
+
+            <div class="fan-picker" id="fanPicker"></div>
+
+            <div class="manual-amount">
+              <label>
+                直接输入金额
+                <input id="directAmount" type="number" min="0" placeholder="留空则自动计算" />
+              </label>
+              <button class="secondary-action" id="calcSettleBtn">计算</button>
+            </div>
+          </section>
+
+          <aside class="confirm-surface">
+            <div class="section-title">
+              <p class="eyebrow">确认收付款</p>
+              <h2 id="settleTotal">¥0</h2>
+            </div>
+            <div class="payment-list" id="paymentList"></div>
+            <button class="primary-action full" id="confirmSettleBtn">确认结算</button>
+            <button class="text-button full" data-route="ai" type="button">复杂牌面，先让 AI 看</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="ai" data-title="AI 裁判">
+        <div class="ai-layout">
+          <section class="photo-surface">
+            <div class="section-title">
+              <p class="eyebrow">AI 辅助识别</p>
+              <h2>复杂牌面裁判结果</h2>
+            </div>
+            <label class="upload-tile">
+              <input id="handImageInput" type="file" accept="image/*" />
+              <span id="uploadLabel">上传牌面照片</span>
+            </label>
+            <div class="tile-rack" id="aiTiles"></div>
+            <button class="primary-action full" id="runAiBtn">开始识别</button>
+          </section>
+
+          <section class="judge-surface">
+            <div class="judge-head">
+              <div>
+                <p class="eyebrow">裁判结果</p>
+                <h2 id="aiResultTitle">清一色 · 自摸</h2>
+              </div>
+              <strong id="confidenceText">96%</strong>
+            </div>
+            <div class="confidence-meter">
+              <span id="confidenceBar"></span>
+            </div>
+            <div class="reason-list" id="reasonList"></div>
+            <div class="judge-actions">
+              <button class="secondary-action" id="applyAiBtn">带入结算</button>
+              <button class="primary-action" id="saveDisputeBtn">保存争议记录</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="summary" data-title="总账复盘">
+        <div class="summary-layout">
+          <section class="summary-main">
+            <div class="section-title">
+              <p class="eyebrow">整场总账</p>
+              <h2>本场结算</h2>
+            </div>
+            <div class="final-scoreboard" id="finalScoreboard"></div>
+            <div class="transfer-list" id="transferList"></div>
+          </section>
+
+          <aside class="share-poster" id="sharePoster">
+            <p class="eyebrow">局后分享图</p>
+            <h2>周六固定局</h2>
+            <div class="poster-winner" id="posterWinner"></div>
+            <div class="poster-stats" id="posterStats"></div>
+            <div class="poster-footer">胡了吗 · 牌局已结清</div>
+          </aside>
+        </div>
+        <div class="summary-actions">
+          <button class="secondary-action" id="saveMatchBtn">终结并保存</button>
+          <button class="primary-action" id="newRoundBtn">回到记一局</button>
+        </div>
+      </section>
+
+      <section class="page" id="history" data-title="历史战绩">
+        <div class="history-layout">
+          <section class="data-block">
+            <div class="section-title">
+              <p class="eyebrow">今日流水</p>
+              <h2>本场单局记录</h2>
+            </div>
+            <div class="match-history" id="roundArchive"></div>
+          </section>
+          <section class="data-block">
+            <div class="section-title">
+              <p class="eyebrow">历史战绩</p>
+              <h2>牌局记录</h2>
+            </div>
+            <div class="match-history" id="matchHistory"></div>
+          </section>
+          <section class="data-block">
+            <div class="section-title">
+              <p class="eyebrow">争议记录</p>
+              <h2>AI 牌面档案</h2>
+            </div>
+            <div class="dispute-list" id="disputeList"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="me" data-title="我的">
+        <div class="me-layout">
+          <section class="data-block">
+            <div class="section-title">
+              <p class="eyebrow">我的牌局</p>
+              <h2>常用功能</h2>
+            </div>
+            <div class="my-action-grid">
+              <button class="secondary-action" data-route="room" type="button">房间面板</button>
+              <button class="secondary-action" data-route="ai" type="button">AI 裁判</button>
+              <button class="secondary-action" data-route="summary" type="button">总账复盘</button>
+              <button class="secondary-action" data-route="history" type="button">历史战绩</button>
+            </div>
+          </section>
+
+          <section class="data-block recent-match" id="recentMatchCard"></section>
+
+          <section class="table-visual" aria-label="四人牌桌">
+            <div class="mahjong-table">
+              <div class="seat seat-top">
+                <span>北</span>
+                <strong>老周</strong>
+              </div>
+              <div class="seat seat-right">
+                <span>东</span>
+                <strong>小林</strong>
+              </div>
+              <div class="seat seat-bottom">
+                <span>南</span>
+                <strong>阿妞</strong>
+              </div>
+              <div class="seat seat-left">
+                <span>西</span>
+                <strong>陈姐</strong>
+              </div>
+              <div class="table-center">
+                <span>第 <b id="homeRound">1</b> 局</span>
+                <strong id="homeNet">0</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="dashboard-band embedded">
+            <article class="data-block">
+              <div class="section-title">
+                <p class="eyebrow">固定牌友圈</p>
+                <h3>常用牌搭子</h3>
+              </div>
+              <div class="friend-row" id="friendGroup"></div>
+            </article>
+            <article class="data-block">
+              <div class="section-title">
+                <p class="eyebrow">本周排行</p>
+                <h3>战绩排行榜</h3>
+              </div>
+              <div class="rank-list" id="homeRanks"></div>
+            </article>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主要导航">
+      <button data-route="home" type="button">
+        <span>首页</span>
+      </button>
+      <button data-route="settle" type="button">
+        <span>记一局</span>
+      </button>
+      <button data-route="me" type="button">
+        <span>我的</span>
+      </button>
+    </nav>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
