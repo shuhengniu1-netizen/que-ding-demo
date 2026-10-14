@@ -1,34 +1,33 @@
-# 胡了吗 Demo v4.0
+# Que Ding · Mahjong Scoring Demo v4.0
 
-这是基于 demo-2.3 更新的用户心智版本：主线从“创建/加入牌局”进入“记一局”，单局确认后继续停留在“记一局”，整盘有明确终点，完结后在“我的”里回看历史。
+An English version of the Que Ding Mahjong scoring prototype. The main flow is: create or join a game, record each hand, finish the full session, and review the saved history from My games.
 
-## 文件
+## Files
 
-- `index.html`：Demo 主页面
-- `styles.css`：视觉与响应式布局
-- `script.js`：跳转流程、单局结算、整盘完结、历史快照
+- `index.html` — main demo page
+- `styles.css` — visual styling and responsive layout
+- `script.js` — navigation, hand settlement, session closeout, and history snapshots
 
-## v4.0 调整
+## v4.0 highlights
 
-- 底部导航文案统一为：首页、记一局、我的。
-- 确认单局结算后不再跳到“我的/房间面板”，继续停留在中间的“记一局”页面。
-- “记一局”顶部增加本盘状态 band，显示房间、局数、规则、当前领先者。
-- “记一局”顶部增加“终结整盘”按钮；总账页也保留“终结并保存”。
-- 终结整盘后保存完整快照：规则、房间码、局数、赢家、四家得分、单局流水、AI 争议数。
-- “我的”页面新增“最近完结”卡片，可直接进入历史查看这一盘。
-- 历史战绩从简要列表升级为整盘信息卡，展示四家最终得分。
+- Bottom navigation uses Home, Record a hand, and My games.
+- Confirming a hand keeps you on the Record a hand screen so the next hand can be entered immediately.
+- The Record a hand screen shows the room, round count, rules, and current leader.
+- The full session can be ended from the Record a hand screen or the ledger.
+- Ending a session saves the rules, room code, rounds, winner, four final scores, hand ledger, and AI dispute count.
+- My games includes a Recently finished card and full session history cards.
 
-## 演示路径
+## Demo flow
 
-1. 首页点击“创建牌局”或“加入牌局”
-2. 创建牌局填写规则、底分、封顶、圈数和玩家信息
-3. 点击“生成房间”，进入房间码页面
-4. 点击“进入牌局房间”，进入“记一局”
-5. 每次确认单局后，页面仍停留在“记一局”，直接继续下一局
-6. 打完后点击“终结整盘”
-7. 自动进入“我的”，在“最近完结”或“历史战绩”查看这一盘
+1. From Home, choose Create a game or Join a game.
+2. Set the rules, base score, cap, rounds, and player names.
+3. Generate a room and enter the game room.
+4. Record and confirm each hand.
+5. Choose End session when the game is complete.
+6. Review the finished session from My games or History.
 
-## Demo 边界
+## Demo scope
 
-- 已做：创建/加入、四人积分、连续单局结算、整盘终结、历史快照、总账复盘、AI 裁判样例
-- 未做：真实支付、真实多人同步、完整登录、完整地区规则库、真实 AI 推理服务接入
+Included: create/join flow, four-player scoring, consecutive hand settlement, session closeout, saved history, ledger review, and AI judge examples.
+
+Not included: real payments, live multiplayer synchronization, full authentication, a complete regional rules library, or a live AI inference service.
